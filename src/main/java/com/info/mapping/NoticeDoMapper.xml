@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"><mapper namespace="com.info.dao.NoticeDao"><resultMap id="NoticeResultMap" type="com.info.pojo.NoticeDo"><id column="notice_id" property="noticeId" jdbcType="INTEGER"/><result column="notice_sender" property="noticeSender" jdbcType="VARCHAR"/><result column="notice_message" property="noticeMessage" jdbcType="VARCHAR"/><result column="create_time" property="createTime" jdbcType="VARCHAR"/><result column="modify_time" property="modifyTime" jdbcType="VARCHAR"/></resultMap><insert id="insertNotice">
+			insert into notice(notice_sender,notice_message,create_time,modify_time)
+  			value(#{notice.noticeSender},#{notice.noticeMessage},date_format(now(),'%Y-%m-%d %H:%i:%s'),date_format(now(),'%Y-%m-%d %H:%i:%s'))
+		</insert></mapper>

@@ -1,0 +1,1 @@
+java -jar -Xmn600m -Xms1200m -Xmx1200m mbgen.jar

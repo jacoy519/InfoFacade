@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.info.pojo.NoticeDo;
 import com.info.pojo.QQCommandDo;
 import com.info.pojo.QQCommandReplay;
 

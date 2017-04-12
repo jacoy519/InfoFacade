@@ -11,8 +11,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.info.pojo.NoticeDo;
-import com.info.pojo.NoticeResponseDo;
+import com.info.entity.NoticeEntity;
+import com.info.entity.NoticeTaskResponseEntity;
 import com.info.service.NoticeService;
 
 @RestController
@@ -26,9 +26,9 @@ public class NoticeRestController {
 	private NoticeService qqNoticeService;
 	
 	@RequestMapping(method = RequestMethod.POST, produces = "application/json; charset=utf-8")
-	public ResponseEntity<NoticeResponseDo> sendNotice(HttpServletRequest request,@RequestBody NoticeDo notice) {
+	public ResponseEntity<NoticeTaskResponseEntity> sendNotice(HttpServletRequest request,@RequestBody NoticeEntity notice) {
 		logger.info("receive send notice request from "+ request.getRemoteHost());
-		NoticeResponseDo noticeResponse = qqNoticeService.submitSendNoticeTask(notice);
-		return new ResponseEntity<NoticeResponseDo>(noticeResponse, HttpStatus.OK);
+		NoticeTaskResponseEntity taskResponse = qqNoticeService.submitNoticeTask(notice);
+		return new ResponseEntity<NoticeTaskResponseEntity>(taskResponse, HttpStatus.OK);
 	}
 }

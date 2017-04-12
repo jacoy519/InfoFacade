@@ -1,11 +1,13 @@
 package com.info.service.impl;
 
 
+import javax.annotation.Resource;
+
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Service;
 
-import com.info.pojo.NoticeDo;
-import com.info.pojo.NoticeResponseDo;
+import com.info.handler.MessageHandler;
+import com.info.pojo.NoticeTaskDo;
 import com.info.service.NoticeService;
 
 
@@ -15,11 +17,14 @@ public class QQNoticeServiceImpl extends AbstractNoticeServiceImpl{
 	
 	private final static Logger logger = Logger.getLogger(NoticeService.class);
 	
+	@Resource
+	private MessageHandler qqMessageHandler; 
+
 	@Override
-	protected NoticeResponseDo sendNotice(NoticeDo notice) throws Exception{
-		// TODO Auto-generated method stub
-		logger.info("send message to QQ: "+ notice.getNoticeMessage());
-		return null;
+	protected void execNoticeTask(NoticeTaskDo noticeTask) throws Exception {
+		logger.info("exec QQ notice send task and the message is "+ noticeTask.getNoticeMessage());
+		qqMessageHandler.sendMessage(noticeTask.getNoticeMessage());
+		Thread.sleep(10000);
 	}
 	
 }

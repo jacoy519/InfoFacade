@@ -1,9 +1,9 @@
 package com.info.service;
 
-import com.info.pojo.NoticeDo;
-import com.info.pojo.NoticeResponseDo;
+import com.info.entity.NoticeEntity;
+import com.info.entity.NoticeTaskResponseEntity;
 
 public interface NoticeService {
 	
-	NoticeResponseDo submitSendNoticeTask(NoticeDo notice);
+	NoticeTaskResponseEntity submitNoticeTask(NoticeEntity notice);
 }

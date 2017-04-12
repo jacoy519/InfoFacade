@@ -1,12 +1,28 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <table name="notice_task" namespace="com.info">
 	
-	<insert id="insertNoticeTask">
-		<input name="notice"></input>
+	<insert id="insertNewNoticeTask">
+		<input name="noticeTask"></input>
 		<sql>
-			insert into notice_task(notice_sender,notice_message,notice_task_status,notice_retryTime,create_time,modify_time)
-  			value(#{notice.noticeSender},#{notice.noticeMessage},'SD','3',date_format(now(),'%Y-%m-%d %H:%i:%s'),date_format(now(),'%Y-%m-%d %H:%i:%s'))
+			insert into notice_task(notice_task_id, notice_sender, notice_message, notice_task_status, notice_task_retryTime, create_time, modify_time)
+  			value(#{noticeTask.noticeTaskId}, #{noticeTask.noticeSender}, #{noticeTask.noticeMessage},'RS','3',date_format(now(),'%Y-%m-%d %H:%i:%s'),date_format(now(),'%Y-%m-%d %H:%i:%s'))
 		</sql>
 	</insert>
+	
+	<update id="updateNoticeTaskToFailure">
+		<input name="noticeTask"></input>
+		<sql>
+			insert into notice_task(notice_task_id, notice_sender, notice_message, notice_task_status, notice_task_retryTime, create_time, modify_time)
+  			value(#{noticeTask.noticeTaskId}, #{noticeTask.noticeSender}, #{noticeTask.noticeMessage},'RS','3',date_format(now(),'%Y-%m-%d %H:%i:%s'),date_format(now(),'%Y-%m-%d %H:%i:%s'))
+		</sql>
+	</update>
+	
+	<update id="updateNoticeTaskToSuccess">
+		<input name="noticeTask"></input>
+		<sql>
+			insert into notice_task(notice_task_id, notice_sender, notice_message, notice_task_status, notice_task_retryTime, create_time, modify_time)
+  			value(#{noticeTask.noticeTaskId}, #{noticeTask.noticeSender}, #{noticeTask.noticeMessage},'RS','3',date_format(now(),'%Y-%m-%d %H:%i:%s'),date_format(now(),'%Y-%m-%d %H:%i:%s'))
+		</sql>
+	</update>
 	
 </table>

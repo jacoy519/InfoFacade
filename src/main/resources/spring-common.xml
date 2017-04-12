@@ -33,6 +33,7 @@
 		<property name ="keepAliveSeconds" value ="300" />
 		<property name ="maxPoolSize" value ="10" />
 		<property name ="queueCapacity" value ="25" />
+		<property name="WaitForTasksToCompleteOnShutdown" value="true" />
 	</bean>
 	
 </beans>  

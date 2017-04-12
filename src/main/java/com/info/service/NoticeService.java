@@ -5,5 +5,5 @@ import com.info.pojo.NoticeResponseDo;
 
 public interface NoticeService {
 	
-	NoticeResponseDo sendNotice(NoticeDo notice);
+	NoticeResponseDo submitSendNoticeTask(NoticeDo notice);
 }

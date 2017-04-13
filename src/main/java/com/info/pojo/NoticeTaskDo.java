@@ -2,58 +2,58 @@ package com.info.pojo;
 
 public class NoticeTaskDo {
 
-    private java.lang.String noticeTaskId;
+    private java.lang.String id;
 
-    private java.lang.String noticeSender;
+    private java.lang.String sender;
 
-    private java.lang.String noticeMessage;
+    private java.lang.String content;
 
-    private java.lang.String noticeTaskStatus;
+    private java.lang.String status;
 
-    private int noticeTaskRetryTime;
+    private int remainAttempt;
 
     private java.lang.String createTime;
 
     private java.lang.String modifyTime;
 
-    public java.lang.String getNoticeTaskId() {
-        return this.noticeTaskId;
+    public java.lang.String getId() {
+        return this.id;
     }
 
-    public void setNoticeTaskId(java.lang.String noticeTaskId) {
-        this.noticeTaskId=noticeTaskId;
+    public void setId(java.lang.String id) {
+        this.id=id;
     }
 
-    public java.lang.String getNoticeSender() {
-        return this.noticeSender;
+    public java.lang.String getSender() {
+        return this.sender;
     }
 
-    public void setNoticeSender(java.lang.String noticeSender) {
-        this.noticeSender=noticeSender;
+    public void setSender(java.lang.String sender) {
+        this.sender=sender;
     }
 
-    public java.lang.String getNoticeMessage() {
-        return this.noticeMessage;
+    public java.lang.String getContent() {
+        return this.content;
     }
 
-    public void setNoticeMessage(java.lang.String noticeMessage) {
-        this.noticeMessage=noticeMessage;
+    public void setContent(java.lang.String content) {
+        this.content=content;
     }
 
-    public java.lang.String getNoticeTaskStatus() {
-        return this.noticeTaskStatus;
+    public java.lang.String getStatus() {
+        return this.status;
     }
 
-    public void setNoticeTaskStatus(java.lang.String noticeTaskStatus) {
-        this.noticeTaskStatus=noticeTaskStatus;
+    public void setStatus(java.lang.String status) {
+        this.status=status;
     }
 
-    public int getNoticeTaskRetryTime() {
-        return this.noticeTaskRetryTime;
+    public int getRemainAttempt() {
+        return this.remainAttempt;
     }
 
-    public void setNoticeTaskRetryTime(int noticeTaskRetryTime) {
-        this.noticeTaskRetryTime=noticeTaskRetryTime;
+    public void setRemainAttempt(int remainAttempt) {
+        this.remainAttempt=remainAttempt;
     }
 
     public java.lang.String getCreateTime() {

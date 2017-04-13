@@ -9,7 +9,6 @@ import com.info.http.model.HttpRequestModel;
 public class HttpMethodContentFactory {
 	
 	public static AbstractHttpMethodContent getHttpMethodContent(HttpRequestModel httpRequestModel, HttpMethodType httpMethodType) {
-		System.out.println("HttpMethodContentFactory");;
 		AbstractHttpMethodContent httpMethodContent = null;
 		switch(httpMethodType) {
 		case GET:

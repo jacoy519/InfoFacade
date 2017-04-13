@@ -6,7 +6,6 @@ import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLConnection;
 
-import org.apache.log4j.Logger;
 
 import com.info.http.model.HttpRequestModel;
 import com.info.http.model.HttpResponseModel;
@@ -15,7 +14,6 @@ import com.info.http.model.HttpResponseModel;
 public abstract class AbstractHttpMethodContent {
 	
 	
-	private final static Logger logger = Logger.getLogger(AbstractHttpMethodContent.class);
 	
 	private HttpRequestModel httpRequestModel;
 	
@@ -29,7 +27,7 @@ public abstract class AbstractHttpMethodContent {
 	protected abstract URLConnection execHttpRequest(URLConnection connection, HttpRequestModel httpRequestModel) throws Exception;
 	
 	public HttpResponseModel getHttpResponse() throws Exception {
-		System.out.println("get Request");
+		
         URL url = getUrl(this.httpRequestModel);
        
         URLConnection connection = getConnection(url);
@@ -41,13 +39,7 @@ public abstract class AbstractHttpMethodContent {
 	
 	private URLConnection getConnection(URL url) throws Exception {
 		URLConnection connection = null;
-		try {
-			connection = url.openConnection();
-		} catch(Exception e) {
-			logger.info(e.getMessage());
-		}
-        
-        
+		connection = url.openConnection();
         connection.setRequestProperty("accept", "*/*");
         connection.setRequestProperty("connection", "Keep-Alive");
         connection.setRequestProperty("user-agent", "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1;SV1)");

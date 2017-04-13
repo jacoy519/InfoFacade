@@ -31,8 +31,6 @@ public abstract class AbstractNoticeServiceImpl implements NoticeService{
 		try {
 			NoticeTaskDo noticeTask = initNoticeTask(notice);
 			response = launchNoticeTask(noticeTask);
-			
-			//response = launchNoticeTaskWithoutPool(noticeTask);
 		} catch (Exception e) {
 			response = handleSubmitNoticeTaskException(e);
 		}
@@ -40,8 +38,25 @@ public abstract class AbstractNoticeServiceImpl implements NoticeService{
 		
 	}
 	
+	
+	public NoticeTaskResponseEntity submitRetryNoticeTask(NoticeTaskDo noticeTask) {
+		NoticeTaskResponseEntity response = null;
+		try {
+			resetNoticeTaskStatus(noticeTask);
+			launchNoticeTask(noticeTask);
+		} catch (Exception e) {
+			response = handleSubmitRetryNoticeTaskException(e, noticeTask);
+		}
+		return response;
+	}
+	
 	private NoticeTaskResponseEntity handleSubmitNoticeTaskException(Exception e) {
 		logger.error("fail to sumbit send notice task, the error is "+ e.getMessage());
+		return NoticeTaskResponseFactory.getsubmitTaskFailResponse();
+	}
+	
+	private NoticeTaskResponseEntity handleSubmitRetryNoticeTaskException(Exception e, NoticeTaskDo noticeTask) {
+		logger.error("fail to sumbit retry send notice task, the error is "+ e.getMessage());
 		return NoticeTaskResponseFactory.getsubmitTaskFailResponse();
 	}
 	
@@ -51,6 +66,16 @@ public abstract class AbstractNoticeServiceImpl implements NoticeService{
 			throw new Exception("fail add notice task to DB");
 		}
 		return task;
+	}
+	
+	private void resetNoticeTaskStatus(NoticeTaskDo task) throws Exception {
+		if(!tryUpdateRetryNoticeTaskStatusToAttempt(task)) {
+			throw new Exception("fail reset notice task status to attempt and the task id is "+ task.getId());
+		}
+	}
+	
+	private boolean tryUpdateRetryNoticeTaskStatusToAttempt(NoticeTaskDo task) {
+		return noticeTaskDao.updateNoticeTaskStatusToAttempt(task) == 1 ? true :false;
 	}
 	
 	private boolean tryAddNewNoticeTaskToDB(NoticeTaskDo task) {
@@ -64,31 +89,22 @@ public abstract class AbstractNoticeServiceImpl implements NoticeService{
 					execNoticeTask(noticeTask);
 					handleExecNoticeTaskSuccess(noticeTask);
 				} catch (Exception e) {
-					handleExecNoticeTaskException(e);
+					handleExecNoticeTaskException(e, noticeTask);
 				}
 				
 			}});
 		return NoticeTaskResponseFactory.getsubmitTaskSuccessResponse();
 	}
 	
-	private NoticeTaskResponseEntity launchNoticeTaskWithoutPool(final NoticeTaskDo noticeTask) {
-		try {
-			execNoticeTask(noticeTask);
-			handleExecNoticeTaskSuccess(noticeTask);
-			} catch (Exception e) {
-				handleExecNoticeTaskException(e);
-			}
-		return NoticeTaskResponseFactory.getsubmitTaskSuccessResponse();
-	}
-	
-	private void handleExecNoticeTaskException(Exception e) {
+	private void handleExecNoticeTaskException(Exception e, NoticeTaskDo noticeTask) {
 		logger.info("fail to launch send notice task, the error is "+ e.getMessage());
-		//TODO
+		noticeTaskDao.updateNoticeTaskStatusToFailure(noticeTask);
+		
 	}
 	
 	private void handleExecNoticeTaskSuccess(NoticeTaskDo noticeTask) {
 		logger.info("task exec success");
-		//TODO
+		noticeTaskDao.updateNoticeTaskStatusToSuccess(noticeTask);
 	}
 	
 }

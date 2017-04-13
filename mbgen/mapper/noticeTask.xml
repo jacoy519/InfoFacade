@@ -4,25 +4,72 @@
 	<insert id="insertNewNoticeTask">
 		<input name="noticeTask"></input>
 		<sql>
-			insert into notice_task(notice_task_id, notice_sender, notice_message, notice_task_status, notice_task_retryTime, create_time, modify_time)
-  			value(#{noticeTask.noticeTaskId}, #{noticeTask.noticeSender}, #{noticeTask.noticeMessage},'RS','3',date_format(now(),'%Y-%m-%d %H:%i:%s'),date_format(now(),'%Y-%m-%d %H:%i:%s'))
+			insert into notice_task(id, sender, content, status,remain_attempt, create_time, modify_time)
+  			value(#{noticeTask.id}, #{noticeTask.sender}, #{noticeTask.content},'AT','3',date_format(now(),'%Y-%m-%d %H:%i:%s'),date_format(now(),'%Y-%m-%d %H:%i:%s'))
 		</sql>
 	</insert>
 	
-	<update id="updateNoticeTaskToFailure">
+	<update id="updateNoticeTaskStatusToFailure">
 		<input name="noticeTask"></input>
 		<sql>
-			insert into notice_task(notice_task_id, notice_sender, notice_message, notice_task_status, notice_task_retryTime, create_time, modify_time)
-  			value(#{noticeTask.noticeTaskId}, #{noticeTask.noticeSender}, #{noticeTask.noticeMessage},'RS','3',date_format(now(),'%Y-%m-%d %H:%i:%s'),date_format(now(),'%Y-%m-%d %H:%i:%s'))
+			update notice_task 
+  			set status = 'FA',
+				modify_time = date_format(now(),'%Y-%m-%d %H:%i:%s')
+  			where id = #{noticeTask.id} and status = 'AT'
 		</sql>
 	</update>
 	
-	<update id="updateNoticeTaskToSuccess">
+	<update id="updateNoticeTaskStatusToSuccess">
 		<input name="noticeTask"></input>
 		<sql>
-			insert into notice_task(notice_task_id, notice_sender, notice_message, notice_task_status, notice_task_retryTime, create_time, modify_time)
-  			value(#{noticeTask.noticeTaskId}, #{noticeTask.noticeSender}, #{noticeTask.noticeMessage},'RS','3',date_format(now(),'%Y-%m-%d %H:%i:%s'),date_format(now(),'%Y-%m-%d %H:%i:%s'))
+			update notice_task 
+  			set status = 'SC',
+				modify_time = date_format(now(),'%Y-%m-%d %H:%i:%s')
+  			where id = #{noticeTask.id} and status = 'AT'
 		</sql>
 	</update>
+	
+	<update id="updateNoticeTaskStatusToAttempt">
+		<input name="noticeTask"></input>
+		<sql>
+			update notice_task 
+  			set status = 'AT',
+				remain_attempt = remain_attempt -1 ,
+				modify_time = date_format(now(),'%Y-%m-%d %H:%i:%s')
+  			where id = #{noticeTask.id} and status = 'FA'
+		</sql>
+	</update>
+	
+	<select id="selectNeedRetryTaskList" result="multiply">
+		<sql>
+			select * from notice_task where remain_attempt>0 and status = 'FA'
+		</sql>
+	</select>
+	
+	<select id="selectSuccessTaskList" result="multiply">
+		<sql>
+			select * from notice_task where status = 'SC'
+		</sql>
+	</select>
+	
+	<select id="selectFailTaskList" result="multiply">
+		<sql>
+			select * from notice_task where status = 'FA'
+		</sql>
+	</select>
+	
+	<select id="selectAttemptTaskList" result="multiply">
+		<sql>
+			select * from notice_task where status = 'AT'
+		</sql>
+	</select>
+	
+	<delete id="deleteNoticeTaskById">
+		<input name="noticeTask"></input>
+		<sql>
+			delete from notice_task where id = #{noticeTask.id}
+		</sql>
+	</delete>
+	
 	
 </table>

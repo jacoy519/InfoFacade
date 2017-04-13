@@ -16,12 +16,12 @@ public class NoticeTaskDaoTest extends JunitTestBaseTest {
 	
 	@Test
 	public void test(){
-		for(int i=0;i<10;i++) {
 			NoticeTaskDo noticeTask = new NoticeTaskDo();
-			noticeTask.setNoticeTaskId(UUID.randomUUID().toString());
-			noticeTask.setNoticeSender("test"+i);
-			noticeTask.setNoticeMessage("message"+i);
+			noticeTask.setId(UUID.randomUUID().toString());
+			noticeTask.setSender("test");
+			noticeTask.setContent("message");
 			System.out.println("insert "+ noticeTaskDao.insertNewNoticeTask(noticeTask) + " notice");
-		}
+
+			System.out.println("update "+ noticeTaskDao.updateNoticeTaskStatusToAttempt(noticeTask) + " notice");
 	}
 }

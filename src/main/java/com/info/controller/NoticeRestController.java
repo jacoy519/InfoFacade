@@ -27,7 +27,7 @@ public class NoticeRestController {
 	
 	@RequestMapping(method = RequestMethod.POST, produces = "application/json; charset=utf-8")
 	public ResponseEntity<NoticeTaskResponseEntity> sendNotice(HttpServletRequest request,@RequestBody NoticeEntity notice) {
-		logger.info("receive send notice request from "+ request.getRemoteHost());
+		logger.info("receive notice request from "+ request.getRemoteHost());
 		NoticeTaskResponseEntity taskResponse = qqNoticeService.submitNoticeTask(notice);
 		return new ResponseEntity<NoticeTaskResponseEntity>(taskResponse, HttpStatus.OK);
 	}

@@ -1,5 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"><mapper namespace="com.info.dao.NoticeTaskDao"><resultMap id="NoticeTaskResultMap" type="com.info.pojo.NoticeTaskDo"><id column="notice_task_id" property="noticeTaskId" jdbcType="VARCHAR"/><result column="notice_sender" property="noticeSender" jdbcType="VARCHAR"/><result column="notice_message" property="noticeMessage" jdbcType="VARCHAR"/><result column="notice_task_status" property="noticeTaskStatus" jdbcType="VARCHAR"/><result column="notice_task_retryTime" property="noticeTaskRetryTime" jdbcType="INTEGER"/><result column="create_time" property="createTime" jdbcType="VARCHAR"/><result column="modify_time" property="modifyTime" jdbcType="VARCHAR"/></resultMap><insert id="insertNewNoticeTask">
-			insert into notice_task(notice_task_id, notice_sender, notice_message, notice_task_status, notice_task_retryTime, create_time, modify_time)
-  			value(#{noticeTask.noticeTaskId}, #{noticeTask.noticeSender}, #{noticeTask.noticeMessage},'RS','3',date_format(now(),'%Y-%m-%d %H:%i:%s'),date_format(now(),'%Y-%m-%d %H:%i:%s'))
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"><mapper namespace="com.info.dao.NoticeTaskDao"><resultMap id="Notice_taskResultMap" type="com.info.pojo.NoticeTaskDo"><id column="id" property="id" jdbcType="VARCHAR"/><result column="sender" property="sender" jdbcType="VARCHAR"/><result column="content" property="content" jdbcType="VARCHAR"/><result column="status" property="status" jdbcType="VARCHAR"/><result column="remain_attempt" property="remainAttempt" jdbcType="INTEGER"/><result column="create_time" property="createTime" jdbcType="VARCHAR"/><result column="modify_time" property="modifyTime" jdbcType="VARCHAR"/></resultMap><select id="selectNeedRetryTaskList" resultMap="Notice_taskResultMap">
+			select * from notice_task where remain_attempt&gt;0 and status = 'FA'
+		</select><select id="selectSuccessTaskList" resultMap="Notice_taskResultMap">
+			select * from notice_task where status = 'SC'
+		</select><select id="selectFailTaskList" resultMap="Notice_taskResultMap">
+			select * from notice_task where status = 'FA'
+		</select><select id="selectAttemptTaskList" resultMap="Notice_taskResultMap">
+			select * from notice_task where status = 'AT'
+		</select><delete id="deleteNoticeTaskById">
+			delete from notice_task where id = #{noticeTask.id}
+		</delete><update id="updateNoticeTaskStatusToFailure">
+			update notice_task 
+  			set status = 'FA',
+				modify_time = date_format(now(),'%Y-%m-%d %H:%i:%s')
+  			where id = #{noticeTask.id} and status = 'AT'
+		</update><update id="updateNoticeTaskStatusToSuccess">
+			update notice_task 
+  			set status = 'SC',
+				modify_time = date_format(now(),'%Y-%m-%d %H:%i:%s')
+  			where id = #{noticeTask.id} and status = 'AT'
+		</update><update id="updateNoticeTaskStatusToAttempt">
+			update notice_task 
+  			set status = 'AT',
+				remain_attempt = remain_attempt -1 ,
+				modify_time = date_format(now(),'%Y-%m-%d %H:%i:%s')
+  			where id = #{noticeTask.id} and status = 'FA'
+		</update><insert id="insertNewNoticeTask">
+			insert into notice_task(id, sender, content, status,remain_attempt, create_time, modify_time)
+  			value(#{noticeTask.id}, #{noticeTask.sender}, #{noticeTask.content},'AT','3',date_format(now(),'%Y-%m-%d %H:%i:%s'),date_format(now(),'%Y-%m-%d %H:%i:%s'))
 		</insert></mapper>

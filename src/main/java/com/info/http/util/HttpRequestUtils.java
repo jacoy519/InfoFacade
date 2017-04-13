@@ -18,7 +18,6 @@ public class HttpRequestUtils {
     }
     
     public static HttpResponseModel execHttpRequest(HttpRequestModel httpRequestModel, HttpMethodType httpMethodType) throws Exception {
-    	System.out.println("HttpRequestUtils");
     	HttpResponseModel httpResponseModel = new HttpResponseModel();
     	AbstractHttpMethodContent httpMethodContent = HttpMethodContentFactory.getHttpMethodContent(httpRequestModel, httpMethodType);
     	httpResponseModel = httpMethodContent.getHttpResponse();

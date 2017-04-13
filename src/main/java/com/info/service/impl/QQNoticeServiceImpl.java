@@ -22,9 +22,8 @@ public class QQNoticeServiceImpl extends AbstractNoticeServiceImpl{
 
 	@Override
 	protected void execNoticeTask(NoticeTaskDo noticeTask) throws Exception {
-		logger.info("exec QQ notice send task and the message is "+ noticeTask.getNoticeMessage());
-		qqMessageHandler.sendMessage(noticeTask.getNoticeMessage());
-		Thread.sleep(10000);
+		logger.info("exec QQ notice send task and the message is "+ noticeTask.getContent());
+		qqMessageHandler.sendMessage(noticeTask.getContent());
 	}
 	
 }

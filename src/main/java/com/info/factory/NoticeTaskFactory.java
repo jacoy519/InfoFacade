@@ -9,9 +9,9 @@ public class NoticeTaskFactory {
 	
 	public static NoticeTaskDo getNoticeTaskEntity(NoticeEntity notice) {
 		NoticeTaskDo task = new NoticeTaskDo();
-		task.setNoticeTaskId(UUID.randomUUID().toString());
-		task.setNoticeSender(notice.getSender());
-		task.setNoticeMessage(notice.getContent());
+		task.setId(UUID.randomUUID().toString());
+		task.setSender(notice.getSender());
+		task.setContent(notice.getContent());
 		return task;
 	}
 }

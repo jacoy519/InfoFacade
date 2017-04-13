@@ -4,14 +4,12 @@ import java.io.PrintWriter;
 import java.net.URL;
 import java.net.URLConnection;
 
-import org.apache.log4j.Logger;
 
 import com.info.http.model.HttpRequestModel;
 
 
 public class HttpPostContent extends AbstractHttpMethodContent {
 	
-	private final static Logger logger = Logger.getLogger(HttpPostContent.class);
 	
 	public HttpPostContent(HttpRequestModel httpRequestModel) {
 		super(httpRequestModel);
@@ -24,21 +22,18 @@ public class HttpPostContent extends AbstractHttpMethodContent {
 
 	@Override
 	protected URLConnection execHttpRequest(URLConnection connection, HttpRequestModel httpRequestModel) throws Exception {
-		logger.info("information");
 		PrintWriter out = null;
-       try {
-           connection.setDoOutput(true);
-           connection.setDoInput(true);
-           out = new PrintWriter(connection.getOutputStream());
-           out.print(httpRequestModel.getParamStr());
-           out.flush();
-       }
-       finally{
-       	if(out!=null){
-       		out.close();
-       	}
-       }
-       return connection;
+		try {
+			connection.setDoOutput(true);
+			connection.setDoInput(true);
+			out = new PrintWriter(connection.getOutputStream());
+			out.print(httpRequestModel.getParamStr());
+			out.flush();
+		} finally {
+			if(out!=null) {
+				out.close();
+			}
+		}
+		return connection;
 	}
-
 }

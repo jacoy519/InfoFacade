@@ -19,4 +19,15 @@ public class NoticeTaskResponseEntity {
 		return this.code;
 	}
 	
+	@Override
+	public boolean equals(Object obj) {
+		if(!(obj instanceof NoticeTaskResponseEntity)) {
+			return false;
+		}
+		NoticeTaskResponseEntity input = (NoticeTaskResponseEntity)obj;
+		
+		return this.status.equals(input.getStatus()) &&
+				this.code.equals(input.getCode());
+	}
+	
 }

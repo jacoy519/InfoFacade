@@ -52,5 +52,14 @@
         <!-- 内存中的最大值 -->  
         <property name="maxInMemorySize" value="40960" />    
     </bean>
+    
+    <mvc:interceptors>
+        <mvc:interceptor>
+            <mvc:mapping path="/command/QQ"/>
+            <bean class="com.info.interceptor.QQCommandInterceptorImpl">
+            </bean>
+        </mvc:interceptor>
+    </mvc:interceptors>
+    
 
 </beans>  

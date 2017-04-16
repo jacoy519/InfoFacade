@@ -21,7 +21,7 @@ public class CommandRestController {
 	@RequestMapping(value="/QQ", method = RequestMethod.POST, produces = "application/json; charset=utf-8")	
 	public ResponseEntity<QQCommandReplay> receiveCommandFromQQ(@RequestBody QQCommandDo command) {
 		
-		logger.info("receive message from QQ: " + command.getContent());
+		logger.info("receive message from QQ " + command.getSender_uid());
 		if(command.getContent() == null) {
 			return new ResponseEntity<QQCommandReplay>(HttpStatus.NON_AUTHORITATIVE_INFORMATION); 
 		}

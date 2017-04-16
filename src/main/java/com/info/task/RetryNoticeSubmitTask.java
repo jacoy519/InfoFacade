@@ -23,7 +23,7 @@ public class RetryNoticeSubmitTask {
 	@Resource
 	private NoticeTaskDao noticeTaskDao;
 	
-    @Scheduled(cron="0/5 * *  * * ? ")   //每5秒执行一次      
+    @Scheduled(cron="0 0/1 *  * * ? ")   //每5秒执行一次      
     public void retryNotice() {
     	List<NoticeTaskDo> retryNoticeTaskList = noticeTaskDao.selectNeedRetryTaskList();
     	logger.info(retryNoticeTaskList.size() + " notice task need to retry");

@@ -1,10 +1,8 @@
 package com.info.pojo;
 
-public class NoticeTaskDo {
+public class CommandTaskDo {
 
     private java.lang.String id;
-
-    private java.lang.String sender;
 
     private java.lang.String content;
 
@@ -24,14 +22,6 @@ public class NoticeTaskDo {
         this.id=id;
     }
 
-    public java.lang.String getSender() {
-        return this.sender;
-    }
-
-    public void setSender(java.lang.String sender) {
-        this.sender=sender;
-    }
-
     public java.lang.String getContent() {
         return this.content;
     }
@@ -44,7 +34,7 @@ public class NoticeTaskDo {
         return this.status;
     }
 
-    public void setStatus(java.lang.String status) {            
+    public void setStatus(java.lang.String status) {
         this.status=status;
     }
 

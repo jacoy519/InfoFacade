@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"><mapper namespace="com.info.dao.CommandTaskDao"><resultMap id="Command_taskResultMap" type="com.info.pojo.CommandTaskDo"><id column="id" property="id" jdbcType="VARCHAR"/><result column="content" property="content" jdbcType="VARCHAR"/><result column="status" property="status" jdbcType="VARCHAR"/><result column="remain_attempt" property="remainAttempt" jdbcType="INTEGER"/><result column="create_time" property="createTime" jdbcType="VARCHAR"/><result column="modify_time" property="modifyTime" jdbcType="VARCHAR"/></resultMap><select id="selectNeedRetryTaskList" resultMap="Command_taskResultMap">
+			select * from command_task where remain_attempt&gt;0 and status = 'FA'
+		</select><select id="selectSuccessTaskList" resultMap="Command_taskResultMap">
+			select * from command_task where status = 'SC'
+		</select><select id="selectFailTaskList" resultMap="Command_taskResultMap">
+			select * from command_task where status = 'FA'
+		</select><select id="selectAttemptTaskList" resultMap="Command_taskResultMap">
+			select * from command_task where status = 'AT'
+		</select><delete id="deleteCommandTaskById">
+			delete from command_task where id = #{commandTask.id}
+		</delete><update id="updateCommandTaskStatusToFailure">
+			update command_task 
+  			set status = 'FA',
+				modify_time = date_format(now(),'%Y-%m-%d %H:%i:%s')
+  			where id = #{commandTask.id} and status = 'AT'
+		</update><update id="updateCommandTaskStatusToSuccess">
+			update command_task 
+  			set status = 'SC',
+				modify_time = date_format(now(),'%Y-%m-%d %H:%i:%s')
+  			where id = #{commandTask.id} and status = 'AT'
+		</update><update id="updateCommandTaskStatusToAttempt">
+			update command_task 
+  			set status = 'AT',
+				remain_attempt = remain_attempt -1 ,
+				modify_time = date_format(now(),'%Y-%m-%d %H:%i:%s')
+  			where id = #{commandTask.id} and status = 'FA'
+		</update><insert id="insertNewCommandTask">
+			insert into command_task(id, content, status,remain_attempt, create_time, modify_time)
+  			value(#{commandTask.id}, #{commandTask.content},'AT','3',date_format(now(),'%Y-%m-%d %H:%i:%s'),date_format(now(),'%Y-%m-%d %H:%i:%s'))
+		</insert></mapper>

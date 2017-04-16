@@ -5,25 +5,21 @@ import org.springframework.stereotype.Component;
 
 import com.info.entity.CommandTaskResponseEntity;
 
-
 @Component
-public class DownloadCommandHandlerImpl extends AbstractCommandHandlerImpl {
+public class CheckCommandHandlerImpl extends AbstractCommandHandlerImpl {
 	
-	private final static Logger logger = Logger.getLogger(DownloadCommandHandlerImpl.class);
-	
-	
+	private final static Logger logger = Logger.getLogger(CheckCommandHandlerImpl.class);
 	@Override
 	protected CommandTaskResponseEntity exec(String cmd, String args) {
 		// TODO Auto-generated method stub
-		logger.info("exec command");
 		return null;
 	}
 
 	@Override
 	protected boolean isMatchHandlerRule(String cmd) {
 		// TODO Auto-generated method stub
-		logger.info("try match command");
-		return true;
+		logger.info("try match handler");
+		return false;
 	}
 
 }

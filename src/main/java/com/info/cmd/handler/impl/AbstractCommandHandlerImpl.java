@@ -6,6 +6,8 @@ import org.apache.log4j.Logger;
 
 import com.info.cmd.handler.CommandHandler;
 import com.info.entity.CommandTaskResponseEntity;
+import com.info.entity.NoticeEntity;
+import com.info.factory.NoticeEntityFactory;
 
 public abstract class AbstractCommandHandlerImpl implements CommandHandler {
 	
@@ -13,21 +15,22 @@ public abstract class AbstractCommandHandlerImpl implements CommandHandler {
 	
 	private CommandHandler nextHandler;
 	
-	public CommandTaskResponseEntity runCommand(String cmd, List<String> args) {
+	public NoticeEntity runCommand(String cmd, List<String> args) {
 		
 		if(isMatchHandlerRule(cmd)) {
-			logger.info(cmd + " is matched by "+ getCommandHandlerName());
+			logger.info(cmd + " is executed by "+ getCommandHandlerName());
 			return exec(cmd,args);
 		}
 		
 		if(isExistNextHandler()) {
 			return nextHandler.runCommand(cmd, args);
 		}
-
-		return null;
+		
+		logger.info(cmd + " is not matched by any command handler");
+		return NoticeEntityFactory.getParseCommandFailNoticeEntity();
 	}
 	
-	protected abstract CommandTaskResponseEntity exec(String cmd, List<String> args);
+	protected abstract NoticeEntity exec(String cmd, List<String> args);
 	
 	protected abstract boolean isMatchHandlerRule(String cmd);
 	

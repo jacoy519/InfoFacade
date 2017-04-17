@@ -10,6 +10,8 @@ import org.springframework.stereotype.Component;
 
 import com.info.content.PythonFilePathContent;
 import com.info.entity.CommandTaskResponseEntity;
+import com.info.entity.NoticeEntity;
+import com.info.factory.NoticeEntityFactory;
 import com.info.util.PythonUtils;
 
 @Component
@@ -20,20 +22,19 @@ public class CheckIPCommandHandlerImpl extends AbstractCommandHandlerImpl {
 	
 	//检查当前运行服务器IP地址
 	@Override
-	protected CommandTaskResponseEntity exec(String cmd, List<String> args) {
+	protected NoticeEntity exec(String cmd, List<String> args) {
 		try {
-			logger.info("Check ip command exec : "+cmd);
 			String pythonFilePath = PythonFilePathContent.CHECK_IP_PY_FILE;
 			PythonUtils.executePythonFile(pythonFilePath, args);
 		} catch (Exception e ) {
 			logger.error("error run check ip command exec");
 		}
-		return null;
+		return NoticeEntityFactory.getParseCommandSuccessNoticeEntity("正在查询当前ip地址");
 	}
 
 	@Override
 	protected boolean isMatchHandlerRule(String cmd) {
-
+		logger.info("match ");
 		List<String> regExList = new ArrayList<String>();
 		regExList.add("ip");
 		regExList.add("IP");

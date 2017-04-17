@@ -13,6 +13,8 @@ import org.springframework.stereotype.Component;
 import com.info.chain.CommandHandlerChain;
 import com.info.cmd.handler.*;
 import com.info.cmd.handler.impl.AbstractCommandHandlerImpl;
+import com.info.entity.NoticeEntity;
+import com.info.factory.NoticeEntityFactory;
 
 @Component("commandHandlerChain")
 public class CommandHandlerChainImpl implements CommandHandlerChain {
@@ -42,17 +44,17 @@ public class CommandHandlerChainImpl implements CommandHandlerChain {
 		}
 	}
 	
-	public void parseCommand(String command) {
+	public NoticeEntity parseCommand(String command) {
 		String[] commandSplit = command.split(" ");
 		if(commandSplit.length == 0 ) {
-			return;
+			return NoticeEntityFactory.getParseCommandFailNoticeEntity();
 		}
 		String cmd = commandSplit[0];
 		List<String> args = new ArrayList<String>();
 		for(int i=1;i<commandSplit.length;i++) {
 			args.add(commandSplit[i]);
 		}
-		beginHandler.runCommand(cmd, args);
+		return beginHandler.runCommand(cmd, args);
 	}
-
+	
 }

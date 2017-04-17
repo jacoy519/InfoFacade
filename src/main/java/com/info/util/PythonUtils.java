@@ -2,9 +2,13 @@ package com.info.util;
 
 import java.util.List;
 
+import org.apache.log4j.Logger;
+
 import com.info.content.PythonFilePathContent;
 
 public class PythonUtils {
+	
+	private final static Logger logger = Logger.getLogger(PythonUtils.class);
 	
 	public static Process executePythonFile(String filePath, List<String> args) throws Exception {
 		StringBuffer cmdBuffer = new StringBuffer();
@@ -16,6 +20,7 @@ public class PythonUtils {
 			cmdBuffer.append(arg);
 		}
 		String systemCmd = cmdBuffer.toString();
+		logger.info("execute system command: " + systemCmd);
 		return Runtime.getRuntime().exec(systemCmd); 
 	}
 }

@@ -3,8 +3,9 @@ package com.info.cmd.handler;
 import java.util.List;
 
 import com.info.entity.CommandTaskResponseEntity;
+import com.info.entity.NoticeEntity;
 
 public interface CommandHandler {
 	
-	CommandTaskResponseEntity runCommand(String cmd, List<String> args);
+	NoticeEntity runCommand(String cmd, List<String> args);
 }

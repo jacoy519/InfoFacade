@@ -68,7 +68,7 @@ public class QQCommandInterceptorImpl implements HandlerInterceptor {
 	}
 	
 	private String getSenderUidFromRequestBody(String body) {
-		String regEx = "\"sender_uid\": \"(.*?)\"";
+		String regEx = "\"sender_uid\":(.*?),";
 		Pattern pattern = Pattern.compile(regEx);
 		Matcher matcher = pattern.matcher(body);
 		if(!matcher.find()) {

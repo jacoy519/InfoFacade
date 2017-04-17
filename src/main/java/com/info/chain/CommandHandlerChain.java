@@ -1,7 +1,8 @@
 package com.info.chain;
 
+import com.info.entity.NoticeEntity;
 
 public interface CommandHandlerChain {
 	
-	void parseCommand(String command);
+	NoticeEntity parseCommand(String command);
 }

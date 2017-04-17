@@ -44,7 +44,6 @@ public class CommandServiceImpl implements CommandService {
 		} catch (Exception e) {
 			handleSubmitCommandTaskFail(e, command);
 		}
-		handleSubmitCommandTaskSuccess(command);
 		return null;
 	}
 	
@@ -58,13 +57,9 @@ public class CommandServiceImpl implements CommandService {
 	private void launchCommandTask(final String command) {
 		taskExecutor.execute(new Runnable(){
 			public void run() {
-				commandHandlerChain.parseCommand(command);
+				NoticeEntity notice = commandHandlerChain.parseCommand(command);
+				qqNoticeService.submitNoticeTask(notice);
 			}});
-	}
-	
-	private void handleSubmitCommandTaskSuccess(String command) {
-		logger.error("submit command task success :" + command);
-		sendCommandSubmitSuccessNotice(command);
 	}
 	
 	private void handleSubmitCommandTaskFail(Exception e, String command) {
@@ -77,20 +72,11 @@ public class CommandServiceImpl implements CommandService {
 	}
 	
 	
-	private void sendCommandSubmitSuccessNotice(String command) {
-		NoticeEntity notice = new NoticeEntity();
-		notice.setSender("Info Facade System");
-		notice.setContent("命令任务提交成功，命令为" + command);
-		qqNoticeService.submitNoticeTask(notice);
-	}
-	
 	private void sendCommandSubmitFailNotice(String command) {
 		NoticeEntity notice = new NoticeEntity();
 		notice.setSender("Info Facade System");
-		notice.setContent("命令任务提交失败，任务为：" + command);
+		notice.setContent("命令任务提交失败，请重新提交");
 		qqNoticeService.submitNoticeTask(notice);
 	}
 	
-
-
 }

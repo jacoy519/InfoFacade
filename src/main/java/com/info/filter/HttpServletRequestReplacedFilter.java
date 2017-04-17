@@ -24,11 +24,14 @@ public class HttpServletRequestReplacedFilter implements Filter {
 		if(request instanceof HttpServletRequest) {  
 			requestWrapper = new MyHttpServletRequestWrapper((HttpServletRequest) request);  
 		}  
-		if(null == requestWrapper) {  
-			chain.doFilter(request, response);  
-			} else {  
-	            chain.doFilter(requestWrapper, response);  
-	        }  
+		if(null == requestWrapper) {
+			
+			chain.doFilter(request, response);
+			
+		} else {
+			
+			chain.doFilter(requestWrapper, response);
+		}  
 		
 	}
 

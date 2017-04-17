@@ -1,5 +1,7 @@
 package com.info.chain.impl;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 import javax.annotation.PostConstruct;
@@ -9,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.info.chain.CommandHandlerChain;
-import com.info.entity.CommandEntity;
 import com.info.cmd.handler.*;
 import com.info.cmd.handler.impl.AbstractCommandHandlerImpl;
 
@@ -41,8 +42,17 @@ public class CommandHandlerChainImpl implements CommandHandlerChain {
 		}
 	}
 	
-	public void paresCommandHandlerChain(String command) {
-		beginHandler.runCommand("test", "test");
+	public void parseCommand(String command) {
+		String[] commandSplit = command.split(" ");
+		if(commandSplit.length == 0 ) {
+			return;
+		}
+		String cmd = commandSplit[0];
+		List<String> args = new ArrayList<String>();
+		for(int i=1;i<commandSplit.length;i++) {
+			args.add(commandSplit[i]);
+		}
+		beginHandler.runCommand(cmd, args);
 	}
 
 }

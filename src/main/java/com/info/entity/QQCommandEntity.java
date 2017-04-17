@@ -1,7 +1,7 @@
-package com.info.pojo;
+package com.info.entity;
 
-public class QQCommandDo {
-	
+public class QQCommandEntity {
+
 	private String content;
 	
 	private String time;

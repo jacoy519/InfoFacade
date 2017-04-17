@@ -1,7 +1,9 @@
 package com.info.interceptor;
 
 import java.io.BufferedReader;
-import java.util.Map.Entry;
+import java.io.IOException;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -15,6 +17,8 @@ import org.springframework.web.servlet.ModelAndView;
 public class QQCommandInterceptorImpl implements HandlerInterceptor {
 	
 	private final static Logger logger = Logger.getLogger(QQCommandInterceptorImpl.class);
+	
+	private Set<String> validSenderUidSet = new HashSet<String>();
 	
 
 	public void afterCompletion(HttpServletRequest arg0, HttpServletResponse arg1, Object arg2, Exception arg3)
@@ -30,29 +34,55 @@ public class QQCommandInterceptorImpl implements HandlerInterceptor {
 	}
 
 	public boolean preHandle(HttpServletRequest arg0, HttpServletResponse arg1, Object arg2) throws Exception {
-		// TODO Auto-generated method stub
-
+		String senderUid = getSenderUidFromRequest(arg0);
+		return isSenderUidVaildate(senderUid);
+	}
+	
+	private String getSenderUidFromRequest(HttpServletRequest request) {
+		String body = getHttpServletRequestBody(request);
+		return getSenderUidFromRequestBody(body);
+		
+	}
+	
+	private boolean isSenderUidVaildate(String sendUid) {
+		return validSenderUidSet.contains(sendUid);
+	}
+	
+	private String getHttpServletRequestBody(HttpServletRequest request) {
 		StringBuffer sb = new StringBuffer();
 		String line=null;
-		BufferedReader reader = arg0.getReader();
-		while((line = reader.readLine()) != null) {
-			sb.append(line);
+		String body = "";
+		BufferedReader reader;
+		try {
+			reader = request.getReader();
+			while((line = reader.readLine()) != null) {
+				sb.append(line);
+			}
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
-		
-		String body = sb.toString();
-		logger.info(body);
 
+		body = sb.toString();
+		return body;
+	}
+	
+	private String getSenderUidFromRequestBody(String body) {
 		String regEx = "\"sender_uid\": \"(.*?)\"";
 		Pattern pattern = Pattern.compile(regEx);
 		Matcher matcher = pattern.matcher(body);
-		
 		if(!matcher.find()) {
-			return false;
+			return "";
 		}
-		
-		String uid = matcher.group(1);
-		logger.info(uid);
-		return true;
+		return matcher.group(1);
+	}
+	
+	public Set<String> getValidSenderUidSet() {
+		return this.validSenderUidSet;
+	}
+	
+	public void setValidSenderUidSet(Set<String> validSenderUidSet) {
+		this.validSenderUidSet = validSenderUidSet;
 	}
 
 }

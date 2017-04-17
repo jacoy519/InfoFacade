@@ -4,7 +4,6 @@ import javax.annotation.Resource;
 
 import org.junit.Test;
 
-import com.info.entity.CommandEntity;
 import com.info.test.base.JunitTestBaseTest;
 
 public class CommandHandlerChainTest extends JunitTestBaseTest {
@@ -14,6 +13,6 @@ public class CommandHandlerChainTest extends JunitTestBaseTest {
 	
 	@Test
 	public void test(){
-		commandHandlerChain.paresCommandHandlerChain("test");
+		commandHandlerChain.parseCommand("test");
 	}
 }

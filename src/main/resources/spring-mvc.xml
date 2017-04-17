@@ -57,6 +57,11 @@
         <mvc:interceptor>
             <mvc:mapping path="/command/QQ"/>
             <bean class="com.info.interceptor.QQCommandInterceptorImpl">
+            	<property name="validSenderUidSet">
+            		<set>
+            			<value>824244047</value>
+            		</set>
+            	</property>
             </bean>
         </mvc:interceptor>
     </mvc:interceptors>

@@ -8,8 +8,7 @@ public class NoticeEntityFactory {
 	
 	private final static String PARSE_CMD_FAIL_MSG = "解析命令失败";
 	
-	
-	public static NoticeEntity getParseCommandSuccessNoticeEntity(String content) {
+	public static NoticeEntity getSystemNoticeEntity(String content) {
 		return getNoticeEntity(SYS_SENDER, content);
 	}
 	

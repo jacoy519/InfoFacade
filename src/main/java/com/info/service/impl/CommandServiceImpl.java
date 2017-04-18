@@ -1,11 +1,9 @@
 package com.info.service.impl;
 
-import java.util.Set;
 
 import javax.annotation.Resource;
 
 import org.apache.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.stereotype.Service;
 
@@ -14,6 +12,7 @@ import com.info.dao.CommandTaskDao;
 import com.info.entity.CommandTaskResponseEntity;
 import com.info.entity.NoticeEntity;
 import com.info.factory.CommandTaskFactory;
+import com.info.factory.NoticeEntityFactory;
 import com.info.pojo.CommandTaskDo;
 import com.info.service.CommandService;
 import com.info.service.NoticeService;
@@ -39,26 +38,27 @@ public class CommandServiceImpl implements CommandService {
 	
 	public CommandTaskResponseEntity submitCommandTask(String command) {
 		try {
-			initNewCommandTask(command);
-			launchCommandTask(command);
+			CommandTaskDo commandTask = initNewCommandTask(command);
+			launchCommandTask(commandTask);
 		} catch (Exception e) {
 			handleSubmitCommandTaskFail(e, command);
 		}
 		return null;
 	}
 	
-	private void initNewCommandTask(String command) throws Exception {
+	private CommandTaskDo initNewCommandTask(String command) throws Exception {
 		CommandTaskDo taskDo = CommandTaskFactory.getCommandTaskDo(command);
 		if(!tryAddNewCommandTaskToDB(taskDo)) {
 			throw new Exception("fail to add new command task");
 		}
+		return taskDo;
 	}
 	
-	private void launchCommandTask(final String command) {
+	private void launchCommandTask(final CommandTaskDo commandTask) {
 		taskExecutor.execute(new Runnable(){
 			public void run() {
-				NoticeEntity notice = commandHandlerChain.parseCommand(command);
-				qqNoticeService.submitNoticeTask(notice);
+				String result = commandHandlerChain.parseCommand(commandTask.getContent());
+				handleLaunchCommandTaskSuccess(commandTask, result);
 			}});
 	}
 	
@@ -72,11 +72,17 @@ public class CommandServiceImpl implements CommandService {
 	}
 	
 	
+	
 	private void sendCommandSubmitFailNotice(String command) {
-		NoticeEntity notice = new NoticeEntity();
-		notice.setSender("Info Facade System");
-		notice.setContent("命令任务提交失败，请重新提交");
+		NoticeEntity notice = NoticeEntityFactory.getSystemNoticeEntity("命令任务提交失败，请重新提交");
 		qqNoticeService.submitNoticeTask(notice);
 	}
+	
+	private void handleLaunchCommandTaskSuccess(CommandTaskDo task, String result) {
+		commandTaskDao.updateCommandTaskStatusToSuccess(task);
+		NoticeEntity notice = NoticeEntityFactory.getSystemNoticeEntity(result);
+		qqNoticeService.submitNoticeTask(notice);
+	}
+	
 	
 }

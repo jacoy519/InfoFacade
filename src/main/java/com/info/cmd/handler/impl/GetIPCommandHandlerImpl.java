@@ -8,33 +8,30 @@ import java.util.regex.Pattern;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Component;
 
-import com.info.content.PythonFilePathContent;
-import com.info.entity.CommandTaskResponseEntity;
-import com.info.entity.NoticeEntity;
-import com.info.factory.NoticeEntityFactory;
-import com.info.util.PythonUtils;
+import java.net.InetAddress;
+import java.net.UnknownHostException;  
 
-@Component
-public class CheckIPCommandHandlerImpl extends AbstractCommandHandlerImpl {
+@Component("getIPCommandHandler")
+public class GetIPCommandHandlerImpl extends AbstractCommandHandlerImpl {
 	
-	private final static Logger logger = Logger.getLogger(CheckIPCommandHandlerImpl.class);
+	private final static Logger logger = Logger.getLogger(GetIPCommandHandlerImpl.class);
 	
 	
 	//检查当前运行服务器IP地址
 	@Override
-	protected NoticeEntity exec(String cmd, List<String> args) {
+	protected String exec(String cmd, List<String> args) {
+		String ip = null;
 		try {
-			String pythonFilePath = PythonFilePathContent.CHECK_IP_PY_FILE;
-			PythonUtils.executePythonFile(pythonFilePath, args);
+			ip = getHostIp();
 		} catch (Exception e ) {
 			logger.error("error run check ip command exec");
+			return "查询ip地址失败";
 		}
-		return NoticeEntityFactory.getParseCommandSuccessNoticeEntity("正在查询当前ip地址");
+		return "当前ip地址为:" + ip;
 	}
 
 	@Override
 	protected boolean isMatchHandlerRule(String cmd) {
-		logger.info("match ");
 		List<String> regExList = new ArrayList<String>();
 		regExList.add("ip");
 		regExList.add("IP");
@@ -48,5 +45,10 @@ public class CheckIPCommandHandlerImpl extends AbstractCommandHandlerImpl {
 		}
 		return false;
 	}
+	
+    private String getHostIp() throws UnknownHostException{
+    	InetAddress inetAddress = InetAddress.getLocalHost();
+        return inetAddress.getHostAddress();  
+    }  
 	
 }

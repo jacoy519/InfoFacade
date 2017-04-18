@@ -40,6 +40,7 @@
 		<property name="WaitForTasksToCompleteOnShutdown" value="true" />
 	</bean>
 	
+	
 	<!-- 定时任务注释配置 -->
 	<task:annotation-driven scheduler="scheduler"/>
 	<task:scheduler id="scheduler" pool-size="2"/>  

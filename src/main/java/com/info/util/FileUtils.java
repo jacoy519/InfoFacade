@@ -46,7 +46,7 @@ public class FileUtils {
 	
 	public static void main(String[] args) {
 		try {
-			List<String> filePath = findFile("baidu", "D:/");
+			List<String> filePath = findFile("cm3d2_b_4.zip", "D:/getuploader");
 			for(String file: filePath) {
 				System.out.println(file);
 			}

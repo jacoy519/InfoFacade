@@ -13,11 +13,7 @@ import org.springframework.stereotype.Component;
 @Component("getDiscSpaceCommandHandler")
 public class GetDiscSpaceCommandHandlerImpl extends AbstractCommandHandlerImpl{
 
-	@Override
-	protected String exec(String cmd, List<String> args) {
-		
-		return getAllDiscSpaceMessage();
-	}
+
 
 	@Override
 	protected boolean isMatchHandlerRule(String cmd) {
@@ -27,20 +23,32 @@ public class GetDiscSpaceCommandHandlerImpl extends AbstractCommandHandlerImpl{
 		return matcher.find();
 	}
 	
+	@Override
+	protected String exec(String cmd, List<String> args) throws Exception{
+		
+		return getAllDiscSpaceMessage();
+	}
+	
+	
+	@Override
+	protected String getExecFailMessage() {
+		// TODO Auto-generated method stub
+		return "获取磁盘信息失败";
+	}
 	
 	private String getAllDiscSpaceMessage() {
 		StringBuffer spaceMessage = new StringBuffer();
 		File[] fs = File.listRoots();
 		for(File disc : fs) {
 			if(disc.exists()) {
-				String message = getSingleDiscSpaceMessage(disc);
-				spaceMessage.append(message+"\n");
+				String message = getDiscSpaceMessage(disc);
+				spaceMessage.append(message).append('\n');
 			}
 		}
 		return spaceMessage.toString();
 	}
 	
-	private String getSingleDiscSpaceMessage(File disc) {
+	private String getDiscSpaceMessage(File disc) {
 		FileSystemView fsv = FileSystemView.getFileSystemView();
 		String discName = fsv.getSystemDisplayName(disc);
 		String totalSpace = FormetFileSize(disc.getTotalSpace());
@@ -63,5 +71,7 @@ public class GetDiscSpaceCommandHandlerImpl extends AbstractCommandHandlerImpl{
 		}
 		return fileSizeString;
 	}
+
+
 	
 }

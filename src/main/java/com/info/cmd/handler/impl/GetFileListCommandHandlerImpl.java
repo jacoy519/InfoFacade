@@ -14,19 +14,6 @@ public class GetFileListCommandHandlerImpl extends AbstractCommandHandlerImpl {
 
 	private final static Logger logger = Logger.getLogger(GetFileListCommandHandlerImpl.class);
 	
-	@Override
-	protected String exec(String cmd, List<String> args) {
-		String message = "";
-		try {
-			String fileDirPath = getFileDirPath(args);
-			List<String> childfileList = FileUtils.getFileList(fileDirPath);
-			message = getFileListMessage(fileDirPath, childfileList);
-		} catch (Exception e) {
-			logger.error("get file list error: " + e.getMessage());
-			return "文件夹路径错误";
-		}
-		return message;
-	}
 
 	@Override
 	protected boolean isMatchHandlerRule(String cmd) {
@@ -34,6 +21,18 @@ public class GetFileListCommandHandlerImpl extends AbstractCommandHandlerImpl {
 		Pattern pattern = Pattern.compile(regEx);
 		Matcher matcher = pattern.matcher(cmd);
 		return matcher.find();
+	}
+	
+	@Override
+	protected String exec(String cmd, List<String> args) throws Exception {
+		String fileDirPath = getFileDirPath(args);
+		List<String> childfileList = FileUtils.getFileList(fileDirPath);
+		return getFileListMessage(fileDirPath, childfileList);
+	}
+	
+	@Override
+	protected String getExecFailMessage() {
+		return "获取文件列表失败";
 	}
 	
 	private String getFileDirPath(List<String> args) {
@@ -44,9 +43,11 @@ public class GetFileListCommandHandlerImpl extends AbstractCommandHandlerImpl {
 		StringBuffer output = new StringBuffer();
 		output.append(fileDirPath + "中的文件:\n");
 		for(String childFileName : fileList) {
-			output.append(childFileName + "\n");
+			output.append(childFileName).append('\n');
 		}
 		return output.toString();
 	}
+
+
 
 }

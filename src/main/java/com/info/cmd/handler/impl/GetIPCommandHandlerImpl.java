@@ -14,22 +14,6 @@ import java.net.UnknownHostException;
 @Component("getIPCommandHandler")
 public class GetIPCommandHandlerImpl extends AbstractCommandHandlerImpl {
 	
-	private final static Logger logger = Logger.getLogger(GetIPCommandHandlerImpl.class);
-	
-	
-	//检查当前运行服务器IP地址
-	@Override
-	protected String exec(String cmd, List<String> args) {
-		String ip = null;
-		try {
-			ip = getHostIp();
-		} catch (Exception e ) {
-			logger.error("error run check ip command exec");
-			return "查询ip地址失败";
-		}
-		return "当前ip地址为:" + ip;
-	}
-
 	@Override
 	protected boolean isMatchHandlerRule(String cmd) {
 		List<String> regExList = new ArrayList<String>();
@@ -46,9 +30,24 @@ public class GetIPCommandHandlerImpl extends AbstractCommandHandlerImpl {
 		return false;
 	}
 	
+	//检查当前运行服务器IP地址
+	@Override
+	protected String exec(String cmd, List<String> args) throws Exception{
+		String ip  = getHostIp();
+		return "当前ip地址为:" + ip;
+	}
+	
+	
+	@Override
+	protected String getExecFailMessage() {
+		return "获取IP信息失败";
+	}  
+	
     private String getHostIp() throws UnknownHostException{
     	InetAddress inetAddress = InetAddress.getLocalHost();
         return inetAddress.getHostAddress();  
-    }  
+    }
+
+
 	
 }

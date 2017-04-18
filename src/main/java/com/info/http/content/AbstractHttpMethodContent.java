@@ -62,6 +62,7 @@ public abstract class AbstractHttpMethodContent {
 			in = new BufferedReader(new InputStreamReader(connection.getInputStream(), "UTF-8"));
 	        String line;
 	        while ((line = in.readLine()) != null) {
+	        	System.out.println("line:"+line);
 	            sb.append(line);
 	        }
 		} finally {

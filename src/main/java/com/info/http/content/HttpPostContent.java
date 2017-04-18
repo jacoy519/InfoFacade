@@ -27,6 +27,7 @@ public class HttpPostContent extends AbstractHttpMethodContent {
 			connection.setDoOutput(true);
 			connection.setDoInput(true);
 			out = new PrintWriter(connection.getOutputStream());
+			String param = httpRequestModel.getParamStr();
 			out.print(httpRequestModel.getParamStr());
 			out.flush();
 		} finally {

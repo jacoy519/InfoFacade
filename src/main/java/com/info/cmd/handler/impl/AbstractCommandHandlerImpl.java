@@ -18,7 +18,14 @@ public abstract class AbstractCommandHandlerImpl implements CommandHandler {
 		
 		if(isMatchHandlerRule(cmd)) {
 			logger.info(cmd + " is executed by "+ getCommandHandlerName());
-			return exec(cmd,args);
+			String message = "";
+			try {
+				message = exec(cmd,args);;
+			} catch(Exception e) {
+				logger.error(getCommandHandlerName() + "exec the cmd ["+ cmd +"] fail");
+				message = getExecFailMessage();
+			}
+			return message; 
 		}
 		
 		if(isExistNextHandler()) {
@@ -29,9 +36,11 @@ public abstract class AbstractCommandHandlerImpl implements CommandHandler {
 		return StandardNoticeContent.NOT_FIND_MATCHED_COMMAND_HANDLER;
 	}
 	
-	protected abstract String exec(String cmd, List<String> args);
-	
 	protected abstract boolean isMatchHandlerRule(String cmd);
+	
+	protected abstract String exec(String cmd, List<String> args) throws Exception;
+	
+	protected abstract String getExecFailMessage();
 	
 	protected String getCommandHandlerName() {
 		return this.getClass().getSimpleName();

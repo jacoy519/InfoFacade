@@ -11,19 +11,7 @@ import com.info.util.FileUtils;
 @Component("findFileCommandHandler")
 public class FindFileCommandHandlerImpl extends AbstractCommandHandlerImpl {
 	
-	
-	@Override
-	protected String exec(String cmd, List<String> args) {
-		// TODO Auto-generated method stub
-		try{
-			String fileRootPath = getSearchFileRootPath(args);
-			String targetFile = getSearchTargetFileName(args);
-			List<String> fileNameList = FileUtils.findFile(targetFile, fileRootPath);
-		} catch(Exception e) {
-			
-		}
-		return null;
-	}
+
 
 	@Override
 	protected boolean isMatchHandlerRule(String cmd) {
@@ -33,6 +21,21 @@ public class FindFileCommandHandlerImpl extends AbstractCommandHandlerImpl {
 		return matcher.find();
 	}
 	
+	
+	@Override
+	protected String exec(String cmd, List<String> args)  throws Exception{
+		String fileRootPath = getSearchFileRootPath(args);
+		String targetFile = getSearchTargetFileName(args);
+		List<String> searchFilePathList = FileUtils.findFile(targetFile, fileRootPath);
+		return searchFilePathListToString(searchFilePathList);
+	}
+	
+	@Override
+	protected String getExecFailMessage() {
+		// TODO Auto-generated method stub
+		return "查找文件失败";
+	}
+	
 	private String getSearchFileRootPath(List<String> args) {
 		return args.get(0);
 	}
@@ -40,4 +43,16 @@ public class FindFileCommandHandlerImpl extends AbstractCommandHandlerImpl {
 	private String getSearchTargetFileName(List<String> args) {
 		return args.get(1);
 	}
+	
+	private String searchFilePathListToString(List<String> searchFileList) {
+		StringBuilder strBuilder = new StringBuilder();
+		strBuilder.append("搜索结果:\n");
+		for(String searchFilePath : searchFileList) {
+			strBuilder.append(searchFilePath);
+			strBuilder.append('\n');
+		}
+		return strBuilder.toString();
+	}
+
+
 }

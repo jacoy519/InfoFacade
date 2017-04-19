@@ -14,7 +14,6 @@ public class GetFileListCommandHandlerImpl extends AbstractCommandHandlerImpl {
 
 	private final static Logger logger = Logger.getLogger(GetFileListCommandHandlerImpl.class);
 	
-
 	@Override
 	protected boolean isMatchHandlerRule(String cmd) {
 		String regEx="获取文件列表";

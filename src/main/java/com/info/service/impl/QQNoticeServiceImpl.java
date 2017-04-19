@@ -20,29 +20,48 @@ public class QQNoticeServiceImpl extends AbstractNoticeServiceImpl{
 	
 	private final static Logger logger = Logger.getLogger(NoticeService.class);
 	
-	private final static int MAX_MSE_LENGTH = 900;
+	private final static int MAX_MSE_LENGTH = 888;
 	
-	private final static String ChANG_LINE_TAG = "%0a";
+	private final static String CHANGE_LINE_TAG = "%0a";
 
 	@Override
 	protected void execNoticeTask(NoticeTaskDo noticeTask) throws Exception {
 		String message = noticeTask.getContent();
-		message = message.replace("\n", "%0a");
-		List<String> splitedMessages = splitMessage(message);
+		List<String> splitedMessages = splitMessageAndReplaceChangeLineTag(message);
 		for(String splitedMessage : splitedMessages) {
 			sendMessage(splitedMessage);
 		}
 	}
 	
-	private List<String> splitMessage(String message) {
+	private List<String> splitMessageAndReplaceChangeLineTag(String message) {
+		String[] splitMessages = message.split("\n");
 		List<String> messages = new ArrayList<String>();
-		int start = 0 ;
-		int end = MAX_MSE_LENGTH>=message.length()?message.length():MAX_MSE_LENGTH; 
-		while(start<message.length()) {
-			messages.add(message.substring(start, end));
-			start = end;
-			end = end + MAX_MSE_LENGTH;
-			end = end>=message.length()?message.length():end;
+		StringBuffer sb = new StringBuffer();
+		for(int i=0 ; i< splitMessages.length ; i++) {
+			String splitMessage = splitMessages[i];
+			int beforeLength = sb.length();
+			if((beforeLength + splitMessage.length()) < MAX_MSE_LENGTH) {
+				sb.append(splitMessage).append(CHANGE_LINE_TAG);
+				continue;
+			} else {
+				messages.add(sb.toString());
+				sb = new StringBuffer();
+				if(splitMessage.length() < MAX_MSE_LENGTH) {
+					sb.append(splitMessage).append(CHANGE_LINE_TAG);
+					continue;
+				}
+				int start = 0;
+				int end = MAX_MSE_LENGTH;
+				while(start<splitMessage.length()) {
+					messages.add(splitMessage.substring(start, end));
+					start = end;
+					end = end + MAX_MSE_LENGTH;
+					end = (end>=splitMessage.length())?splitMessage.length():end;
+				}
+			}
+		}
+		if(sb.length()>0) {
+			messages.add(sb.toString());
 		}
 		logger.info("split message number :" + messages.size());
 		return messages;

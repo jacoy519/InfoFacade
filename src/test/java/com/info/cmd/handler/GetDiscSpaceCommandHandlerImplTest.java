@@ -21,7 +21,6 @@ public class GetDiscSpaceCommandHandlerImplTest extends JunitTestBaseTest{
 		String cmd = "获取磁盘容量";
 		String message = getDiscSpaceCommandHandler.runCommand(cmd, new ArrayList<String>());
 		logger.info(message);
-		
 	}
 	
 	@Test

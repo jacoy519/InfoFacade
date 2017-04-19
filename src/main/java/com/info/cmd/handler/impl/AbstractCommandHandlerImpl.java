@@ -11,7 +11,6 @@ public abstract class AbstractCommandHandlerImpl implements CommandHandler {
 	
 	private final static Logger logger = Logger.getLogger(CommandHandler.class);
 	
-	
 	private CommandHandler nextHandler;
 	
 	public String runCommand(String cmd, List<String> args) {

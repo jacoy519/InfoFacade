@@ -13,8 +13,6 @@ import com.info.http.model.HttpResponseModel;
 
 public abstract class AbstractHttpMethodContent {
 	
-	
-	
 	private HttpRequestModel httpRequestModel;
 	
 	AbstractHttpMethodContent(HttpRequestModel httpRequestModel) {
@@ -72,5 +70,4 @@ public abstract class AbstractHttpMethodContent {
 		}
         return sb.toString();
 	}
-	
 }

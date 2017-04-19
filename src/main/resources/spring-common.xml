@@ -40,6 +40,12 @@
 		<property name="WaitForTasksToCompleteOnShutdown" value="true" />
 	</bean>
 	
+	<bean id ="findFileTaskExecutor"  class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor" >
+		<property name ="corePoolSize" value ="0" />
+		<property name ="keepAliveSeconds" value ="10" />
+		<property name ="maxPoolSize" value ="100" />
+	</bean>
+	
 	
 	<!-- 定时任务注释配置 -->
 	<task:annotation-driven scheduler="scheduler"/>

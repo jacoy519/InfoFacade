@@ -25,7 +25,7 @@ import java.util.regex.Pattern;
 
 public class FileUtils {
 	
-	private final static ExecutorService fileExecutor = Executors.newFixedThreadPool(30);
+	
 	
 	public static List<String> getFileList(String filePath) throws Exception {
 		List<String> fileList = new ArrayList<String>();
@@ -40,10 +40,11 @@ public class FileUtils {
 		return fileList;
 	}
 	
-	public static Set<String> searchFile(String fileNameRegEx, String searchRootPath) throws InterruptedException, ExecutionException {
+	public static Set<String> searchFile(String fileNameRegEx, final String searchRootPath) throws InterruptedException, ExecutionException {
 		final Set<String> result = new ConcurrentSkipListSet<String>();
 		final Pattern fileNamePattern = Pattern.compile(fileNameRegEx);
 		File file = new File(searchRootPath);
+		ExecutorService fileExecutor = Executors.newFixedThreadPool(5);
 		if(!file.isDirectory()) {
 			return result;
 		}
@@ -53,22 +54,28 @@ public class FileUtils {
 		}
 		final CountDownLatch lock = new CountDownLatch(childFileNames.length);
 		for(final String childFileName : childFileNames) {
-			final String childFilePath = searchRootPath + '/' + childFileName;
-			Matcher matcher = fileNamePattern.matcher(childFileName);
-			if(matcher.find()) {
-				result.add(childFilePath);
-			}
 			fileExecutor.execute(new Runnable(){
 				public void run() {
-					searchFile(fileNamePattern, childFilePath, result);
+					final String childFilePath = searchRootPath + '/' + childFileName;
+					Matcher matcher = fileNamePattern.matcher(childFileName);
+					if(matcher.find()) {
+						result.add(childFilePath);
+					}
+					try {
+						searchFile(fileNamePattern, childFilePath, result);
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 					lock.countDown();
 				}});
 		}
 		lock.await();
+		fileExecutor.shutdown();
 		return result;
 	}
 	
-	public static void searchFile(final Pattern fileNamePattern, final String searchRootPath,final Set<String> result) {
+	public static void searchFile(final Pattern fileNamePattern, final String searchRootPath,final Set<String> result) throws InterruptedException {
 		File file = new File(searchRootPath);
 		if(!file.isDirectory()) {
 			return;
@@ -77,14 +84,27 @@ public class FileUtils {
 		if(childFileNames == null) {
 			return;
 		}
+		ExecutorService fileExecutor = Executors.newFixedThreadPool(5);
+		final CountDownLatch lock = new CountDownLatch(childFileNames.length);
 		for(final String childFileName : childFileNames) {
-			final String childFilePath = searchRootPath + '/' + childFileName;
-			Matcher matcher = fileNamePattern.matcher(childFileName);
-			if(matcher.find()) {
-				result.add(childFilePath);
-			}
-			searchFile(fileNamePattern, childFilePath, result);
+			fileExecutor.execute(new Runnable(){
+				public void run() {
+					final String childFilePath = searchRootPath + '/' + childFileName;
+					Matcher matcher = fileNamePattern.matcher(childFileName);
+					if(matcher.find()) {
+						result.add(childFilePath);
+					}
+					try {
+						searchFile(fileNamePattern, childFilePath, result);
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					lock.countDown();
+				}});
 		}
+		lock.await();
+		fileExecutor.shutdown();
 	}
 	
 	

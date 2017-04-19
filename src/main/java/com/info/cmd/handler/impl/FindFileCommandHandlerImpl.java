@@ -15,6 +15,8 @@ import javax.annotation.Resource;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.stereotype.Component;
 
+import com.info.util.FileUtils;
+
 @Component("findFileCommandHandler")
 public class FindFileCommandHandlerImpl extends AbstractCommandHandlerImpl {
 	
@@ -34,7 +36,7 @@ public class FindFileCommandHandlerImpl extends AbstractCommandHandlerImpl {
 	protected String exec(String cmd, List<String> args)  throws Exception{
 		String fileRootPath = getSearchFileRootPath(args);
 		String targetFile = getSearchTargetFileName(args);
-		Set<String> searchFilePaths = searchFiles(targetFile, fileRootPath);
+		Set<String> searchFilePaths = FileUtils.searchFile(targetFile, fileRootPath);
 		return searchFilePathCollectionToString(searchFilePaths);
 	}
 	
